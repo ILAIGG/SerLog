@@ -1,50 +1,46 @@
 import tkinter as tk
-from math import sqrt
+from tkinter import messagebox
+from tkintermapview import TkinterMapView
+from geopy.geocoders import Nominatim
 
-# Coordenadas simuladas (x, y) - Escala simple (pueden ser km o "píxeles")
-PUNTOS = {
-    "Central": (100, 300),
-    "Ciudad A": (200, 200),
-    "Ciudad B": (300, 250),
-    "Rosario": (400, 150)
-}
-
-def calcular_distancia(p1, p2):
-    x1, y1 = p1
-    x2, y2 = p2
-    return round(sqrt((x2 - x1)**2 + (y2 - y1)**2), 2)
-
-def mostrar_ruta(canvas, puntos):
-    total = 0
-    canvas.delete("all")
+# Función para geocodificar dirección
+def buscar_direccion():
+    direccion = entry_direccion.get()
+    if not direccion:
+        messagebox.showerror("Error", "Ingrese una dirección válida.")
+        return
     
-    keys = list(puntos.keys())
-    for i in range(len(keys) - 1):
-        p1 = puntos[keys[i]]
-        p2 = puntos[keys[i + 1]]
-        canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="blue", width=2)
-        canvas.create_oval(p1[0]-5, p1[1]-5, p1[0]+5, p1[1]+5, fill="red")
-        canvas.create_text(p1[0]+10, p1[1]-10, text=keys[i], anchor="w")
-        total += calcular_distancia(p1, p2)
-    
-    # Último punto
-    px, py = puntos[keys[-1]]
-    canvas.create_oval(px-5, py-5, px+5, py+5, fill="green")
-    canvas.create_text(px+10, py-10, text=keys[-1], anchor="w")
-    
-    label_resultado.config(text=f"Distancia total: {total} unidades")
+    geolocator = Nominatim(user_agent="tp_integrador")
+    try:
+        location = geolocator.geocode(direccion)
+        if location:
+            lat, lon = location.latitude, location.longitude
+            map_widget.set_position(lat, lon)  # centra el mapa
+            map_widget.set_marker(lat, lon, text=direccion)  # pone un marcador
+        else:
+            messagebox.showwarning("No encontrado", "No se pudo encontrar la dirección.")
+    except Exception as e:
+        messagebox.showerror("Error", f"Ocurrió un problema: {e}")
 
 # Interfaz
 root = tk.Tk()
-root.title("Ruta de Transporte")
+root.title("TP Integrador - Mapa con Dirección")
 
-canvas = tk.Canvas(root, width=500, height=400, bg="white")
-canvas.pack()
+root.geometry("800x600")
 
-label_resultado = tk.Label(root, text="", font=("Arial", 12))
-label_resultado.pack()
+frame = tk.Frame(root)
+frame.pack(pady=10)
 
-btn_trazar = tk.Button(root, text="Trazar Ruta", command=lambda: mostrar_ruta(canvas, PUNTOS))
-btn_trazar.pack(pady=10)
+entry_direccion = tk.Entry(frame, width=50)
+entry_direccion.pack(side=tk.LEFT, padx=5)
+
+btn_buscar = tk.Button(frame, text="Buscar Dirección", command=buscar_direccion)
+btn_buscar.pack(side=tk.LEFT)
+
+# Mapa
+map_widget = TkinterMapView(root, width=780, height=500, corner_radius=0)
+map_widget.pack(pady=10)
+map_widget.set_position(-27.4698, -58.8344)  # Posición inicial (Corrientes)
+map_widget.set_zoom(7)
 
 root.mainloop()
