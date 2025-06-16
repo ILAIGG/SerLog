@@ -7,7 +7,7 @@ from openrouteservice import convert
 
 #VARIABLES
 marcadores = []
-direccion_deposito = "C. 362 3400, Corrientes"
+direccion_deposito = "27°27'53.4S 58°46'04.7W"
 geolocator = Nominatim(user_agent="tp_integrador")
 ors_client = openrouteservice.Client(key="5b3ce3597851110001cf6248b291fdb25ae44917855d2eeb7288848d")
 ruta_actual = None
@@ -150,7 +150,7 @@ map_widget.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 map_widget.set_position(-27.4698, -58.8344)
 map_widget.set_zoom(13)
 
-#Agregar el marcador del depósito (fijo)
-agregar_marcador(direccion_deposito, fijo=True)
+#Agregar el marcador del depósito (Acá dejamos en False, pero si el cliente lo solicita, se puede cambiar a True)
+agregar_marcador(direccion_deposito, fijo=False)
 
 root.mainloop()
