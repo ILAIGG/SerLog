@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkintermapview import TkinterMapView
+from tkinter import ttk
 from geopy.geocoders import Nominatim
 import openrouteservice
 from openrouteservice import convert
@@ -20,7 +21,7 @@ datos_logistica = {}
 id_registro = str(uuid.uuid4()).replace("-", "")
 distancia_ruta = 0
 
-# FUNCIONES DE LOGIN
+
 def verificar_login():
     usuario = entry_usuario.get()
     contrasena = entry_contrasena.get()
@@ -29,7 +30,7 @@ def verificar_login():
     else:
         messagebox.showerror("Error", "Usuario o contraseña incorrectos.")
 
-# FUNCIONES DE MAPA Y RUTA
+
 def geocodificar(direccion):
     try:
         location = geolocator.geocode(direccion)
@@ -330,8 +331,11 @@ entry_costo_combustible = tk.Entry(panel_datos, textvariable=costo_combustible_v
 entry_costo_combustible.pack(padx=10, pady=5)
 
 tk.Label(panel_datos, text="Tipo de camión:", fg="white", bg="#1c2526").pack(padx=10, pady=5)
-entry_tipo_camion = tk.Entry(panel_datos, textvariable=tipo_camion_var)
-entry_tipo_camion.pack(padx=10, pady=5)
+combo_tipo_camion = ttk.Combobox(panel_datos, textvariable=tipo_camion_var, state="readonly")
+combo_tipo_camion['values'] = ("Mercedes Benz Atego", "Scania R500", "Iveco Stralis", "Volvo FH", "Otro")
+combo_tipo_camion.pack(padx=10, pady=5)
+combo_tipo_camion.current(0)  # Selecciona por defecto "Mercedes Benz Atego"
+
 
 tk.Label(panel_datos, text="Peso de la carga (toneladas):", fg="white", bg="#1c2526").pack(padx=10, pady=5)
 entry_peso_carga = tk.Entry(panel_datos, textvariable=peso_carga_var)
