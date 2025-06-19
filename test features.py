@@ -12,7 +12,7 @@ geolocator = Nominatim(user_agent="tp_integrador")
 ors_client = openrouteservice.Client(key="5b3ce3597851110001cf6248b291fdb25ae44917855d2eeb7288848d")
 ruta_actual = None
 
-#FUNCIONES
+#FUNCIONES seccion 2 (mapa y coordenadas)
 def geocodificar(direccion):
     try:
         location = geolocator.geocode(direccion)
