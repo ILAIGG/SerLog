@@ -155,15 +155,13 @@ def confirmar_datos():
         pago_chofer = pago_chofer_var.get()
         dinero_comida = dinero_comida_var.get()
         dinero_hotel = dinero_hotel_var.get()
-        horario = horario_var.get()
+        fecha_envio = fecha_envio_var.get().strip()
+        hora_envio = hora_envio_var.get().strip()
 
         if costo_combustible <= 0 or peso_carga <= 0 or pago_chofer <= 0 or dinero_comida < 0 or dinero_hotel < 0:
             messagebox.showerror("Error", "Los valores numéricos deben ser mayores a cero (o no negativos para comida y hotel).")
             return
 
-        if not tipo_camion or not horario:
-            messagebox.showerror("Error", "El tipo de camión y el horario no pueden estar vacíos.")
-            return
 
         global datos_logistica
         datos_logistica = {
@@ -173,7 +171,10 @@ def confirmar_datos():
             "pago_chofer": pago_chofer,
             "dinero_comida": dinero_comida,
             "dinero_hotel": dinero_hotel,
-            "horario": horario,
+        "fecha_envio": fecha_envio,
+        "hora_envio": hora_envio,
+        "fecha_registro": datetime.now().strftime("%d-%m-%Y"),
+        "hora_registro": datetime.now().strftime("%H.%M.%S"),
             "fecha": datetime.now().strftime("%d-%m-%Y"),
             "hora": datetime.now().strftime("%H.%M.%S")
         }
@@ -207,23 +208,25 @@ def actualizar_resultados():
     lbl_hotel.config(text=f"Hotel: ${costo_hotel:.2f}")
     lbl_peaje.config(text=f"Peaje: ${costo_peaje:.2f}")
     lbl_total.config(text=f"Total: ${costo_total:.2f}")
-    lbl_fecha.config(text=f"Fecha: {datos_logistica['fecha']}")
-    lbl_hora.config(text=f"Hora: {datos_logistica['hora']}")
+    lbl_fecha.config(text=f"Fecha: {datos_logistica['fecha_envio']}")
+    lbl_hora.config(text=f"Hora: {datos_logistica['hora_envio']}")
 
 def guardar_datos():
     if not datos_logistica:
         messagebox.showerror("Error", "No hay datos para guardar.")
         return
 
-    fecha_hora = f"{datos_logistica['fecha'].replace('-', '')}_{datos_logistica['hora'].replace(':', '')}"
+    fecha_hora = f"{datos_logistica['fecha_registro'].replace('-', '')}_{datos_logistica['hora_registro'].replace(':', '')}"
     nombre_archivo = f"{id_registro}_{fecha_hora}.txt"
 
     try:
         with open(nombre_archivo, "w", encoding="utf-8") as archivo:
             archivo.write("Registro de Logística\n")
             archivo.write(f"ID Registro: {id_registro}\n")
-            archivo.write(f"Fecha: {datos_logistica['fecha']}\n")
-            archivo.write(f"Hora: {datos_logistica['hora']}\n")
+            archivo.write(f"Fecha del Envío: {datos_logistica['fecha_envio']}\n")
+            archivo.write(f"Hora del Envío: {datos_logistica['hora_envio']}\n")
+            archivo.write(f"Fecha de Registro: {datos_logistica['fecha_registro']}\n")
+            archivo.write(f"Hora de Registro: {datos_logistica['hora_registro']}\n")
             archivo.write(f"Distancia de la ruta: {distancia_ruta:.2f} km\n")
             archivo.write("\nDatos Ingresados:\n")
             for clave, valor in datos_logistica.items():
@@ -319,7 +322,8 @@ peso_carga_var = tk.DoubleVar()
 pago_chofer_var = tk.DoubleVar()
 dinero_comida_var = tk.DoubleVar()
 dinero_hotel_var = tk.DoubleVar()
-horario_var = tk.StringVar()
+fecha_envio_var = tk.StringVar()
+hora_envio_var = tk.StringVar()
 
 tk.Label(panel_datos, text="Costo del combustible ($/L):", fg="white", bg="#1c2526").pack(padx=10, pady=5)
 entry_costo_combustible = tk.Entry(panel_datos, textvariable=costo_combustible_var)
@@ -345,9 +349,14 @@ tk.Label(panel_datos, text="Dinero destinado a hotel:", fg="white", bg="#1c2526"
 entry_dinero_hotel = tk.Entry(panel_datos, textvariable=dinero_hotel_var)
 entry_dinero_hotel.pack(padx=10, pady=5)
 
-tk.Label(panel_datos, text="Horario:", fg="white", bg="#1c2526").pack(padx=10, pady=5)
-entry_horario = tk.Entry(panel_datos, textvariable=horario_var)
-entry_horario.pack(padx=10, pady=5)
+tk.Label(panel_datos, text="Fecha del envío (dd-mm-aaaa):", fg="white", bg="#1c2526").pack(padx=10, pady=5)
+entry_fecha_envio = tk.Entry(panel_datos, textvariable=fecha_envio_var)
+entry_fecha_envio.pack(padx=10, pady=5)
+
+tk.Label(panel_datos, text="Hora del envío (HH:MM):", fg="white", bg="#1c2526").pack(padx=10, pady=5)
+entry_hora_envio = tk.Entry(panel_datos, textvariable=hora_envio_var)
+entry_hora_envio.pack(padx=10, pady=5)
+
 
 tk.Button(panel_datos, text="Confirmar", bg="magenta", fg="white", command=confirmar_datos).pack(padx=10, pady=10)
 
@@ -376,7 +385,7 @@ lbl_peaje.pack(padx=10, pady=5)
 lbl_total = tk.Label(panel_resultados, text="Total: $0.00", fg="white", bg="#1c2526")
 lbl_total.pack(padx=10, pady=5)
 
-tk.Label(panel_resultados, text="Fecha y Hora:", fg="white", bg="#1c2526").pack(padx=10, pady=5)
+tk.Label(panel_resultados, text="Fecha y Hora del envio:", fg="white", bg="#1c2526").pack(padx=10, pady=5)
 lbl_fecha = tk.Label(panel_resultados, text="Fecha: --/--/----", fg="white", bg="#1c2526")
 lbl_fecha.pack(padx=10, pady=5)
 lbl_hora = tk.Label(panel_resultados, text="Hora: --:--", fg="white", bg="#1c2526")
@@ -389,5 +398,5 @@ imagen_resultados.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 imagen_resultados.image = tk.PhotoImage(file="truck.png")
 imagen_resultados.config(image=imagen_resultados.image)
 
-mostrar_seccion(1)
+mostrar_seccion(0)
 root.mainloop()
