@@ -1,0 +1,22 @@
+Registro de Logística
+ID Registro: b6c9f77c26e04cf7beba1bd82fcf2dc6
+Fecha del Envío: 20/06/2025
+Hora del Envío: 09:00
+Fecha de Registro: 19-06-2025
+Hora de Registro: 21.39.34
+Distancia de la ruta: 10.17 km
+
+Datos Ingresados:
+Costo Combustible: 1100.0
+Tipo Camion: Mercedes Benz Atego
+Peso Carga: 10.0
+Pago Chofer: 12000.0
+Dinero Comida: 500.0
+Dinero Hotel: 10.0
+Fecha Envio: 20/06/2025
+Hora Envio: 09:00
+Fecha Registro: 19-06-2025
+Hora Registro: 21.39.34
+Fecha: 19-06-2025
+Hora: 21.39.34
+Costo Combustible: $5593.11

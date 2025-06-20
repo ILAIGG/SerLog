@@ -1,3 +1,32 @@
+'''
+Trabajo Integrador
+Grupo Numero 5
+Asignaturas: Ingenieria de Software, 
+Paradigmas y lenguajes de programacion,
+Analisis Matematico II
+Fisica I
+
+Integrantes:
+Santiago Meza
+Lucas Ayen Mordka
+Aylen Meza Chiesa
+Rosario Gauto
+Lautaro Romero Stach
+Julian Karatanasopuloz
+Lucas Cremaschi
+
+
+Librerias requeridas
+pip install tkintermapview geopy openrouteservice
+
+API Key: El código usa una clave de API para openrouteservice (5b3ce3597851110001cf6248b291fdb25ae44917855d2eeb7288848d).
+Esta clave debe ser válida y estar activa. Si no funciona, necesitará registrarse en openrouteservice.org para obtener su propia clave y reemplazarla en el código.
+Dependencias adicionales: El código asume que tiene acceso a los archivos de imagen (preparativo_envio.png y truck.png) en el
+ directorio correcto. Asegúrese de que estos archivos existan. sino descarguelas desde nuestro repositorio
+
+ https://github.com/ILAIGG/SerLog
+'''
+
 import tkinter as tk
 from tkinter import messagebox
 from tkintermapview import TkinterMapView
